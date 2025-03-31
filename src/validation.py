@@ -18,6 +18,8 @@ def runJavaValidation(pdfPath):
     Notes:
         Requires Java to be installed and accessible in the system PATH.
         The validation tool JAR is expected to be in a specific location relative to Python's prefix.
+        The flavour identifies the accessibility stndard ["ua1", "ua2"]. For WCAG use --profile with 
+        valid path to validation profile. For more information see https://github.com/veraPDF/veraPDF-validation-profiles
     """
     jarPath = sys.prefix + "/../validation/greenfield-apps-1.27.0-SNAPSHOT.jar"
     try:

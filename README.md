@@ -3,7 +3,7 @@ Here's a comprehensive `README.md` file for your GitHub repository based on the 
 # PDF/UA Compliance Automation Tool
 
 ## Overview
-This tool provides automated PDF/UA compliance processing using the PDFix SDK. It performs tagging, validation, and correction of PDF documents to meet ISO 14289-1:2014 (PDF/UA) accessibility standards.
+This tool provides automated PDF/UA compliance processing using the PDFix SDK. It performs tagging, validation, and correction of PDF documents to meet PDF/UA or WCAG 2.2 accessibility standards.
 
 ## Features
 - **Automatic PDF tagging** - Adds proper structure and tags for accessibility
@@ -15,18 +15,35 @@ This tool provides automated PDF/UA compliance processing using the PDFix SDK. I
 - Python 3.6+
 - PDFix SDK (properly installed and licensed)
 - Java Runtime Environment (for validation tool)
-- `greenfield-apps-1.27.0-SNAPSHOT.jar` validation tool
+- `greenfield-apps-1.27.0-SNAPSHOT.jar` validation tool [veraPDF](https://verapdf.org)
 
 ## Installation
-1. Clone this repository
+1. Clone this repository and initialize python virtial environemnt
+   
+   Linux / macOS
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+   Windows:
+   ```bash
+   python3 -m venv .venv
+   env/Scripts/activate
+   ```
+
 2. Install dependencies:
    ```bash
-   pip install pdfixsdk
+   pip install pdfix-sdk
+   ```
+   or 
+   ```bash
+   pip install -r requirements
    ```
 3. Ensure Java is installed and in your PATH
+   
 4. Place the validation JAR file in the expected location:
    ```
-   {python_prefix}/../validation/greenfield-apps-1.27.0-SNAPSHOT.jar
+   {project_root}/validation/greenfield-apps-1.27.0-SNAPSHOT.jar
    ```
 
 ## Usage
@@ -70,6 +87,8 @@ The tool currently handles fixes for these PDF/UA requirements:
 - Clause 7.1 (Document title display)
 - Clause 7.2 (Language specification)
 
+For more clauses and accessibility actions visit [https://pdfix.net/products/pdfix-sdk/actions/](https://pdfix.net/products/pdfix-sdk/actions/)
+
 ## Error Handling
 The script will:
 - Exit with code 1 on critical errors
@@ -82,19 +101,5 @@ The script will:
 - Final compliance status message
 
 ## License
-[Specify your license here]
+[PDFix License](https://pdfix.net)
 
-## Contributing
-[Add your contribution guidelines here]
-
----
-
-This README provides:
-1. Clear overview of the tool's purpose
-2. Installation and usage instructions
-3. Code structure documentation
-4. Key feature highlights
-5. Error handling information
-6. Places for license and contribution details
-
-Would you like me to add any specific sections or modify any part of this README?
