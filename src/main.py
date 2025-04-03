@@ -52,7 +52,7 @@ def main():
 
     except Exception as e:
         print(f"Chyba: {e}", file=sys.stderr)
-        sys.exit(1)  # Ukončí skript s chybovým kódom    
+        sys.exit(1)  # End the script with error code    
 
     print("All done!")
 
