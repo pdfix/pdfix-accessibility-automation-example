@@ -40,18 +40,22 @@ def main():
 
         # autotag pdf
         autotagPdf(doc)
+        if not doc.Save(validatePath, kSaveFull):
+            raise Exception(GetPdfix().GetError())
 
-        # validate PDF and get failed rules
-        rules = validatePdf(doc, validatePath)
+        # validate PDF and get failed rules and generate validation report
+        rules = validatePdf(validatePath)
 
         # fix validation results
         fixUaClauses(doc, rules)
+        if not doc.Save(taggedPath, kSaveFull):
+            raise Exception(GetPdfix().GetError())
 
-        # validate PDF and check final document
-        rules = validatePdf(doc, taggedPath)
+        # validate PDF and get failed rules and generate validation report
+        rules = validatePdf(taggedPath)
 
     except Exception as e:
-        print(f"Chyba: {e}", file=sys.stderr)
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)  # End the script with error code    
 
     print("All done!")

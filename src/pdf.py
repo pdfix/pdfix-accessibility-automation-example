@@ -1,5 +1,6 @@
 from pdfixsdk import *
 from utils import jsonToRawData
+import json
 
 
 def runFixActions(doc: PdfDoc, data: dict):
@@ -79,7 +80,11 @@ def fixUaClauses(doc: PdfDoc, rules: list):
         return
     
     cmd = { "actions": fixActions }
-    print(f"{cmd}")    
+
+    # Save JSON to a file
+    with open("pdf/actions.json", "w", encoding="utf-8") as file:
+        json.dump(cmd, file, indent=4)
+    
     runFixActions(doc, cmd)
 
 
@@ -93,6 +98,7 @@ def autotagPdf(doc: PdfDoc):
     Raises:
         Exception: If there is an error during the tagging process.
     """    
+
     params = PdfTagsParams()
     if not doc.AddTags(params):
         raise Exception(GetPdfix().GetError())

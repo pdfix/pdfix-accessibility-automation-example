@@ -2,7 +2,7 @@ import subprocess, sys
 from pdfixsdk import *
 import xml.etree.ElementTree as ET
 
-def runJavaValidation(pdfPath):
+def runJavaValidation(pdfPath: str, format: str = "xml"):
     """
     Executes a Java-based PDF/UA validation tool on the specified PDF file.
 
@@ -24,7 +24,7 @@ def runJavaValidation(pdfPath):
     jarPath = sys.prefix + "/../validation/greenfield-apps-1.27.0-SNAPSHOT.jar"
     try:
         result = subprocess.run(
-            ["java", "-jar", jarPath, "--flavour", "ua1", "--format", "xml", pdfPath],  # JAR execution cmd
+            ["java", "-jar", jarPath, "--flavour", "ua1", "--format", format, pdfPath],  # JAR execution cmd
             capture_output=True,  # capture output
             text=True  # read output as text
         )
@@ -32,6 +32,11 @@ def runJavaValidation(pdfPath):
         # check the validation output
         print("STDOUT:\n", result.stdout)
         print("STDERR:\n", result.stderr)
+
+        if result.returncode <= 1:
+            reportPath = os.path.splitext(pdfPath)[0] + "." + format
+            with open(reportPath, "w", encoding="utf-8") as file:
+                file.write(result.stdout)
 
         return result.returncode, result.stdout, result.stderr  # java exit code and output, error
 
@@ -70,7 +75,7 @@ def parseValidationReport(xmlReport: str):
         
     return rules
 
-def validatePdf(doc: PdfDoc, pdfPath: str) -> list:
+def validatePdf(pdfPath: str, format: str = "xml") -> list:
     """
     Validates a PDF document against PDF/UA standards using a Java validation tool.
 
@@ -84,21 +89,20 @@ def validatePdf(doc: PdfDoc, pdfPath: str) -> list:
     Raises:
         Exception: If the document cannot be saved or if validation fails unexpectedly.
     """    
-    if not doc.Save(pdfPath, kSaveFull):
-        raise Exception(GetPdfix().GetError())
+    exitCode, output, error = runJavaValidation(pdfPath, "xml")
 
-    exitCode, output, error = runJavaValidation(pdfPath)
-
-    rules = []
-
-    if exitCode == 0: 
-        print("Validation successfull.")
-    elif exitCode == 1:
-        print("Non-valid PDF/UA document")
-        rules = parseValidationReport(output)
-    else:
+    if exitCode > 1:
         print(error)
         raise Exception((f"Validation failed with error {exitCode}"))
-    
-    
+
+    # optional - generate HTML validation report
+    runJavaValidation(pdfPath, "html")
+
+    rules = []
+    if exitCode == 0: 
+        print("Validation successfull.")
+    else: # exitCode == 1:
+        print("Non-valid PDF/UA document")
+        rules = parseValidationReport(output)
+            
     return rules
