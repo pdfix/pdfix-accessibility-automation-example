@@ -9,7 +9,7 @@ def runActions(doc: PdfDoc, data: dict):
 
     Parameters:
         doc (PdfDoc): The PDF document object to be modified.
-        data (dict): A dictionary containing the fix actions to be applied.
+        data (dict): A dictionary object containing the actions to be executed.
 
     Raises:
         Exception: If there is an error writing the data or running the commands.
