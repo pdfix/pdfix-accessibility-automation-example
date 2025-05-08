@@ -3,7 +3,7 @@ from utils import jsonToRawData
 import json
 
 
-def runFixActions(doc: PdfDoc, data: dict):
+def runActions(doc: PdfDoc, data: dict):
     """
     Executes PDF fix actions based on the provided configuration data.
 
@@ -85,7 +85,7 @@ def fixUaClauses(doc: PdfDoc, rules: list):
     with open("pdf/actions.json", "w", encoding="utf-8") as file:
         json.dump(cmd, file, indent=4)
     
-    runFixActions(doc, cmd)
+    runActions(doc, cmd)
 
 
 def autotagPdf(doc: PdfDoc):
